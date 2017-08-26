@@ -2,6 +2,8 @@
 
 Automatic collection program of hentai images using CNN
 
+![](https://github.com/eiurur/NNNNN/raw/master/media/demo.gif)
+
 # Requirements
 
 - Windows 10

@@ -11,3 +11,4 @@ _backup/**
 **/*.png
 **/*.gif
 **/__pycache__/**
+!media/**
