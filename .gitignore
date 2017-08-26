@@ -1,0 +1,13 @@
+models/**
+tmp/**
+configs/**
+training/**
+image_pickle/**
+_backup/**
+**/*train.txt
+**/*test.txt
+**/*.jpg
+**/*.jpeg
+**/*.png
+**/*.gif
+**/__pycache__/**
