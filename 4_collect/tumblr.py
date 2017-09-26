@@ -77,15 +77,25 @@ class Tumblr():
 
     # CAUTION: いちいちlikeを遡ってunlikeするのが面倒なので一週間前の画像ポストは自動unlikeする
     def cleanup(self, blog_name, before):
+        print("Before: ", before)
         blog_likes = self.tumblr_client.blog_likes(
-            blog_name, before=before)
+            blog_name, limit=20, before=before)
         print(len(blog_likes["liked_posts"]))
         for idx, post in enumerate(blog_likes["liked_posts"]):
+            print(post["type"], post["liked_timestamp"],
+                  post["id"], post["date"])
             if post["type"] == "photo":
-                self.unlike(post)
+                print("unlike =================> ")
+                try:
+                    self.unlike(post)
+                except Exception as e:
+                    print("Unlike Exception args:", e.args)
         if len(blog_likes["liked_posts"]) > 0:
             last_post = blog_likes["liked_posts"][-1]
-            self.cleanup(blog_name, before=last_post["timestamp"])
+            # print(blog_likes["liked_posts"][0])
+            # print(blog_likes["liked_posts"][-1])
+            print(last_post["liked_timestamp"], post["date"])
+            self.cleanup(blog_name, before=last_post["liked_timestamp"])
 
 
 def look_for_fap():
@@ -95,16 +105,17 @@ def look_for_fap():
 
 def cleanup_fap():
     timestamp_oneweek_ago = (
-        datetime.now() - timedelta(weeks=1)).timestamp()
+        datetime.now() - timedelta(days=2)).timestamp()
     t = Tumblr()
     t.cleanup(config.get(CONFIG_SECTION, 'TUMBLR_BLOG_NAME'),
               before=int(timestamp_oneweek_ago))
 
 
 def main():
+    cleanup_fap()
     jobConfigs = [
-        JobConfig(CronTab("* * * * *"), look_for_fap),
-        # JobConfig(CronTab("20 4 * * 1"), cleanup_fap)
+        JobConfig(CronTab("*/15 * * * *"), cleanup_fap),
+        JobConfig(CronTab("* * * * *"), look_for_fap)
     ]
     p = Pool(len(jobConfigs))
     try:
