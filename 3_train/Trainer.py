@@ -9,6 +9,7 @@ import csv
 import numpy as np
 import random
 import time
+import json
 from datetime import datetime
 import tensorflow as tf
 import tensorflow.python.platform
@@ -102,6 +103,7 @@ class Trainer:
         self.acc = accuracy(self.logits, self.labels_placeholder)
 
         self.sess.run(tf.global_variables_initializer())
+        self.result = []
 
     ###
     # Train Phaseb
@@ -115,8 +117,8 @@ class Trainer:
             # 訓練の実行
             train_csv = CsvFile(TRAIN_DATA)
             trains = train_csv.read()
-            random.shuffle(trains)
             train_len = len(trains)
+            random.shuffle(trains)
 
             train_batch_add = 0 if train_len % BATCH_SIZE is 0 else 1
             train_batch = (train_len / BATCH_SIZE) + train_batch_add
@@ -138,7 +140,7 @@ class Trainer:
             duration = time.time() - start_time
 
             shuffled_trains, _ = separate_list(
-                shuffle(trains), BATCH_SIZE * 50)
+                shuffle(trains), BATCH_SIZE * 10)
             all_train_image, all_train_label = get_image_and_label(
                 shuffled_trains)
 
@@ -171,9 +173,14 @@ class Trainer:
                 # if train_accuracy == previous_train_accuracy:
                 #     break
 
+        self.result.append(json.dumps({
+            "trains_len": len(trains)
+        }))
+
     ###
     # Test Phase
     ###
+
     def test(self):
         test_csv = CsvFile(TEST_DATA)
         tests = test_csv.read()
@@ -187,7 +194,13 @@ class Trainer:
             self.labels_placeholder: test_label,
             self.keep_prob: 1.0})
         print("test accuracy %g" % (test_accuracy))
+        self.result.append(json.dumps({
+            "test_accuracy": test_accuracy
+        }))
 
     def save(self):
         saver = tf.train.Saver()
         saver.save(self.sess, SAVE_MODEL)
+
+    def output(self):
+        return self.result

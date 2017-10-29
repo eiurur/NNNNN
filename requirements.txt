@@ -40,6 +40,7 @@ prompt-toolkit==1.0.14
 protobuf==3.3.0
 Pygments==2.2.0
 pymongo==3.4.0
+pypiwin32==219
 python-dateutil==2.6.0
 PyTumblr==0.0.6
 pyzmq==16.0.2
@@ -59,3 +60,4 @@ wcwidth==0.1.7
 Werkzeug==0.12.2
 widgetsnbextension==2.0.0
 win-unicode-console==0.5
+win10toast==0.8
