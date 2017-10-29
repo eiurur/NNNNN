@@ -8,7 +8,8 @@ class CategorizeResult():
     def __init__(self, url, filename):
         classifying_result = classify([url])
         self.label = classifying_result[1]
+        self.prmax = classifying_result[2]
         self.url = url
         self.filename = "{}.jpg".format(filename)
-        self.filepath = "{}/{}/{}".format(
-            path.abspath(path.join('4_collect', 'images')), self.label, self.filename)
+        self.filepath = "{}/{}/{}_{}".format(
+            path.abspath(path.join('4_collect', 'images')), self.label, self.prmax, self.filename)

@@ -46,7 +46,8 @@ def inference(images_placeholder, keep_prob):
         return tf.nn.max_pool(x, ksize=[1, w, h, 1],
                               strides=[1, w, h, 1], padding='SAME')
     # 入力を28x28x3に変形
-    x_images = tf.reshape(images_placeholder, [-1, IMAGE_SIZE_PX, IMAGE_SIZE_PX, 3])
+    x_images = tf.reshape(images_placeholder,
+                          [-1, IMAGE_SIZE_PX, IMAGE_SIZE_PX, 3])
 
     # 畳み込み層1の作成
     with tf.name_scope('conv1') as scope:
@@ -91,8 +92,8 @@ def inference(images_placeholder, keep_prob):
     # 全結合層1の作成
     with tf.name_scope('fc1') as scope:
         W_fc1 = weight_variable(
-            [int(IMAGE_SIZE_PX / 16) * int(IMAGE_SIZE_PX / 16) * 64, 2048])
-        b_fc1 = bias_variable([2048])
+            [int(IMAGE_SIZE_PX / 16) * int(IMAGE_SIZE_PX / 16) * 64, 4096])
+        b_fc1 = bias_variable([4096])
         h_pool4_flat = tf.reshape(
             h_pool4, [-1, int(IMAGE_SIZE_PX / 16) * int(IMAGE_SIZE_PX / 16) * 64])
         h_fc1 = tf.nn.relu(tf.matmul(h_pool4_flat, W_fc1) + b_fc1)
@@ -101,7 +102,7 @@ def inference(images_placeholder, keep_prob):
 
     # 全結合層2の作成
     with tf.name_scope('fc2') as scope:
-        W_fc2 = weight_variable([2048, CLASSES_NUM])
+        W_fc2 = weight_variable([4096, CLASSES_NUM])
         b_fc2 = bias_variable([CLASSES_NUM])
 
     # ソフトマックス関数による正規化

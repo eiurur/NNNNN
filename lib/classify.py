@@ -71,7 +71,7 @@ def classify(urls):
         print(prmax)
         print(pred)
 
-    if prmax < 0.6:
-        pred = CLASSES_NUM
+    # if prmax < 0.6:
+    #     pred = CLASSES_NUM
 
-    return [pr, pred]
+    return [pr, pred, prmax]

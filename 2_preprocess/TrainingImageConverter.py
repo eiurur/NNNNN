@@ -40,16 +40,16 @@ class TrainingImageConverter:
 
                     to_image_path = self.get_output_filepath(
                         image.file_path, label)
-                    print("\nFrom : %s \nTo => %s\n" %
-                          (image.file_path, to_image_path))
 
                     # 新しい訓練用データセットの情報をファイルに書き出し
                     csv = CsvFile(self.output_file_list_path)
                     csv.append(to_image_path + "," + label + "\n")
 
-                    print(path.exists(to_image_path))
                     if self.overwrite == 0 and path.exists(to_image_path):
                         continue
+
+                    print("\nFrom : %s \nTo => %s\n" %
+                          (image.file_path, to_image_path))
 
                     image.write(sess, to_image_path)
 

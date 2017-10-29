@@ -68,12 +68,13 @@ class Tumblr():
                     self.photo_repository.save(post["id"])
                     categorized_list = self.categorize(post)
                     for idx, categorize_result in enumerate(categorized_list):
+                        print("download ====> " + categorize_result.filepath)
                         self.download(categorize_result)
                     if self.includeFappableImage(categorized_list):
                         print("like ====> " + categorized_list[0].url)
                         self.like(post)
             except Exception as e:
-                print("Exception!! args:", e.args)
+                print("save Exception!! args:", e.args)
 
     # CAUTION: いちいちlikeを遡ってunlikeするのが面倒なので一週間前の画像ポストは自動unlikeする
     def cleanup(self, blog_name, before):
@@ -105,7 +106,7 @@ def look_for_fap():
 
 def cleanup_fap():
     timestamp_oneweek_ago = (
-        datetime.now() - timedelta(days=2)).timestamp()
+        datetime.now() - timedelta(days=3)).timestamp()
     t = Tumblr()
     t.cleanup(config.get(CONFIG_SECTION, 'TUMBLR_BLOG_NAME'),
               before=int(timestamp_oneweek_ago))
