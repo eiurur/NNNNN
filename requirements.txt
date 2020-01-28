@@ -50,7 +50,7 @@ requests-oauthlib==0.8.0
 simplegeneric==0.8.1
 six==1.10.0
 tensorflow==0.12.0rc0
-tensorflow-gpu==1.1.0
+tensorflow-gpu==1.15.2
 testpath==0.3
 tornado==4.5.1
 traitlets==4.3.2
